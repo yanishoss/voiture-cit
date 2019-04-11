@@ -132,7 +132,7 @@ void break_wheel() {
 Nous allons maintenant écrire un module Python qui permettra à qui le veut d'utiliser notre voiture simplement (avec des commandes simples, avec **un plus haut niveau d'abstraction**).
 
 ```python
-// Importe le module Python pour manipuler les ports séries.
+# Importe le module Python pour manipuler les ports séries.
 import serial
 
 GO_FORWARD = 1
@@ -143,27 +143,33 @@ conn = None
 
 light_on = False
 
+# Initialise la communication avec l'Arduino.
+# Veillez bien à mettre le port USB correct (COM1, COM2, ...).
 def start(port):
   with serial.Serial(port=port, baudrate=9600, timeout=1, writeTimeout=1) as connection:
     conn = connection
 
+# Accélère en avant.
 def go_forward(speed):
   if conn == None:
     return 
   conn.write(bytes(GO_FORWARD))
   conn.write(bytes(speed))
   
+# Accélère en arrière.
 def go_backward(speed):
    if conn == None:
     return 
   conn.write(bytes(GO_BACKWARD))
   conn.write(bytes(speed))
 
+# Freine la voiture.
 def break_wheel():
    if conn == None:
     return 
   conn.write(bytes(BREAK_WHEEL))
 
+# Donne l'état du capteur de luminosité sous forme de boolean.
 def is_light_on():
   if conn.in_waiting > 0:
     on = conn.read(1)
