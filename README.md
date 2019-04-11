@@ -2,11 +2,11 @@
 > Un défi à réaliser, coder une voiture avec Arduino et Python
 
 ## Introduction
-Pour coder une voiture avec Arduino et Python, il faut coder une partie en C car Python ne peut pas être lancé sur Arduino.   
-On va alors créer un programme en C mis sur la carte qui communiquera avec un script Python mis sur un ordinateur ou un Raspberry Pi.   
+Pour coder une voiture avec Arduino et Python, il faut coder **une partie en C** car Python ne **peut pas être lancé sur Arduino.**   
+On va alors créer un programme en C mis sur la carte **qui communiquera avec un script Python** mis sur un ordinateur ou un Raspberry Pi.   
 
 ## La partie C
-Le programme en C s'occupe d'écouter sur le port série et d'effectuer les commandes que le script Python lui demande. C'est une interface de programmation qu'on appelle communément API (Application Programming Interface).
+Le programme en C s'occupe **d'écouter sur le port série** et d'effectuer les commandes que le script Python lui demande. C'est une **interface de programmation** qu'on appelle communément API (Application Programming Interface).
 
 ```c
 /*
@@ -129,7 +129,7 @@ void break_wheel() {
 ```
 
 ## La partie Python
-Nous allons maintenant écrire un module Python qui permettra à qui le veut d'utiliser notre voiture simplement (avec des commandes simples, avec un plus haut niveau d'abstraction).
+Nous allons maintenant écrire un module Python qui permettra à qui le veut d'utiliser notre voiture simplement (avec des commandes simples, avec **un plus haut niveau d'abstraction**).
 
 ```python
 // Importe le module Python pour manipuler les ports séries.
@@ -140,6 +140,8 @@ GO_BACKWARD = 2
 BREAK_WHEEL = 3
 
 conn = None
+
+light_on = False
 
 def start(port):
   with serial.Serial(port=port, baudrate=9600, timeout=1, writeTimeout=1) as connection:
@@ -163,11 +165,13 @@ def break_wheel():
   conn.write(bytes(BREAK_WHEEL))
 
 def is_light_on():
-  on = conn.read(1)
-  return on == 1
+  if conn.in_waiting > 0:
+    on = conn.read(1)
+    light_on = on == 1
+  return light_on
 ```
 
 Et voici !   
 Reste plus qu'à adapter le code aux branchements sur la carte Arduino et à jouer :)   
 
-22/20 ou pas ?   
+**22/20 ou pas ?**   
