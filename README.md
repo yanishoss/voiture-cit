@@ -171,7 +171,7 @@ def break_wheel():
 
 # Donne l'état du capteur de luminosité sous forme de boolean.
 def is_light_on():
-  if conn.in_waiting > 0:
+  while conn.in_waiting > 0:
     on = conn.read(1)
     light_on = on == 1
   return light_on
